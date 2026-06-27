@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegionsRouteImport } from './routes/regions'
+import { Route as PredictifRouteImport } from './routes/predictif'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EtablissementsIndexRouteImport } from './routes/etablissements/index'
 import { Route as EnseignantsIndexRouteImport } from './routes/enseignants/index'
@@ -20,6 +21,11 @@ import { Route as ElevesIdRouteImport } from './routes/eleves/$id'
 const RegionsRoute = RegionsRouteImport.update({
   id: '/regions',
   path: '/regions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PredictifRoute = PredictifRouteImport.update({
+  id: '/predictif',
+  path: '/predictif',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -55,6 +61,7 @@ const ElevesIdRoute = ElevesIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/predictif': typeof PredictifRoute
   '/regions': typeof RegionsRoute
   '/eleves/$id': typeof ElevesIdRoute
   '/etablissements/$id': typeof EtablissementsIdRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/predictif': typeof PredictifRoute
   '/regions': typeof RegionsRoute
   '/eleves/$id': typeof ElevesIdRoute
   '/etablissements/$id': typeof EtablissementsIdRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/predictif': typeof PredictifRoute
   '/regions': typeof RegionsRoute
   '/eleves/$id': typeof ElevesIdRoute
   '/etablissements/$id': typeof EtablissementsIdRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/predictif'
     | '/regions'
     | '/eleves/$id'
     | '/etablissements/$id'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/predictif'
     | '/regions'
     | '/eleves/$id'
     | '/etablissements/$id'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/predictif'
     | '/regions'
     | '/eleves/$id'
     | '/etablissements/$id'
@@ -113,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PredictifRoute: typeof PredictifRoute
   RegionsRoute: typeof RegionsRoute
   ElevesIdRoute: typeof ElevesIdRoute
   EtablissementsIdRoute: typeof EtablissementsIdRoute
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/regions'
       fullPath: '/regions'
       preLoaderRoute: typeof RegionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/predictif': {
+      id: '/predictif'
+      path: '/predictif'
+      fullPath: '/predictif'
+      preLoaderRoute: typeof PredictifRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -177,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PredictifRoute: PredictifRoute,
   RegionsRoute: RegionsRoute,
   ElevesIdRoute: ElevesIdRoute,
   EtablissementsIdRoute: EtablissementsIdRoute,
