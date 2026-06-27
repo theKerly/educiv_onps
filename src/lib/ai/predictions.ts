@@ -1,4 +1,4 @@
-import type { Grade, School, Student, Teacher, PredictionResult } from "../types/domain";
+import type { Grade, School, Student, Teacher, PredictionResult, Serie } from "../types/domain";
 import { DROPOUT_MODEL, EXAM_MODEL, SCHOOL_RISK } from "../params";
 import { engagementScore, meanBySubject, progressionScore, weightedMean } from "./scoring";
 
@@ -63,6 +63,35 @@ export function predictBEPC(grades: Grade[]): PredictionResult<"reussite" | "ech
       value: +(means[sub] ?? 10).toFixed(2),
     })).sort((a, b) => b.importance - a.importance),
     explanation: `Projection logistique pondérée. Moyenne pondérée projetée: ${weightedSum.toFixed(2)}/20.`,
+  };
+}
+
+/**
+ * BAC pass probability — série-dépendante. Utilise les pondérations
+ * matières définies dans EXAM_MODEL.BAC.seriesWeights[<serie>]. Tombe
+ * en repli sur la série D si la série fournie n'est pas dans le catalogue.
+ */
+export function predictBAC(
+  grades: Grade[],
+  serie: Serie = "D",
+): PredictionResult<"reussite" | "echec"> {
+  const W = EXAM_MODEL.BAC.seriesWeights[serie] ?? EXAM_MODEL.BAC.seriesWeights.D;
+  const means = meanBySubject(grades);
+  const sumAbsW = Object.values(W).reduce((a, b) => a + Math.abs(b), 0);
+  const weightedSum = Object.entries(W).reduce((s, [sub, w]) => s + (means[sub] ?? 10) * w, 0);
+  const z = EXAM_MODEL.BAC.intercept + (weightedSum - EXAM_MODEL.BAC.successThreshold) * 0.55;
+  const p = sigmoid(z);
+  return {
+    label: p > 0.5 ? "reussite" : "echec",
+    probability: p,
+    confidence: 0.55 + 0.4 * Math.abs(p - 0.5) * 2,
+    variables: Object.entries(W).map(([sub, w]) => ({
+      name: sub.replace(/_/g, " "),
+      importance: Math.abs(w) / sumAbsW,
+      value: +(means[sub] ?? 10).toFixed(2),
+    })).sort((a, b) => b.importance - a.importance),
+    explanation:
+      `Projection logistique série ${serie}. Moyenne pondérée projetée : ${weightedSum.toFixed(2)}/20.`,
   };
 }
 
