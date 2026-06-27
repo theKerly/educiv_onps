@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
+import { ResponsiveContainer, BarChart, Bar, Cell, CartesianGrid, XAxis, YAxis, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 import { PageShell } from "@/components/dashboard/PageShell";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { ChartCard } from "@/components/dashboard/ChartCard";
@@ -65,7 +65,7 @@ function RegionsPage() {
               <Tooltip />
               <Bar dataKey="value" radius={[3, 3, 0, 0]}>
                 {ranking.map((r, i) => (
-                  <Bar key={i} dataKey="value" fill={r.drena.id === selectedId ? "var(--ci-orange)" : "var(--chart-3)"} />
+                  <Cell key={i} fill={r.drena.id === selectedId ? "var(--ci-orange)" : "var(--chart-3)"} />
                 ))}
               </Bar>
             </BarChart>
