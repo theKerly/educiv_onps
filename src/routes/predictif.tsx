@@ -9,7 +9,7 @@ import { analyticsService } from "@/lib/services/analytics.service";
 import {
   ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip,
   RadarChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, Legend,
-  ComposedChart, Area, Line, PieChart, Pie, Cell,
+  ComposedChart, Area, Line,
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
