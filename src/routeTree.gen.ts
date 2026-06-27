@@ -14,6 +14,7 @@ import { Route as RapportsRouteImport } from './routes/rapports'
 import { Route as PredictifRouteImport } from './routes/predictif'
 import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as OrientationRouteImport } from './routes/orientation'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as ClassementsRouteImport } from './routes/classements'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EtablissementsIndexRouteImport } from './routes/etablissements/index'
@@ -45,6 +46,11 @@ const ParametresRoute = ParametresRouteImport.update({
 const OrientationRoute = OrientationRouteImport.update({
   id: '/orientation',
   path: '/orientation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClassementsRoute = ClassementsRouteImport.update({
@@ -86,6 +92,7 @@ const ElevesIdRoute = ElevesIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/classements': typeof ClassementsRoute
+  '/docs': typeof DocsRoute
   '/orientation': typeof OrientationRoute
   '/parametres': typeof ParametresRoute
   '/predictif': typeof PredictifRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/classements': typeof ClassementsRoute
+  '/docs': typeof DocsRoute
   '/orientation': typeof OrientationRoute
   '/parametres': typeof ParametresRoute
   '/predictif': typeof PredictifRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/classements': typeof ClassementsRoute
+  '/docs': typeof DocsRoute
   '/orientation': typeof OrientationRoute
   '/parametres': typeof ParametresRoute
   '/predictif': typeof PredictifRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/classements'
+    | '/docs'
     | '/orientation'
     | '/parametres'
     | '/predictif'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/classements'
+    | '/docs'
     | '/orientation'
     | '/parametres'
     | '/predictif'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/classements'
+    | '/docs'
     | '/orientation'
     | '/parametres'
     | '/predictif'
@@ -174,6 +186,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClassementsRoute: typeof ClassementsRoute
+  DocsRoute: typeof DocsRoute
   OrientationRoute: typeof OrientationRoute
   ParametresRoute: typeof ParametresRoute
   PredictifRoute: typeof PredictifRoute
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/orientation'
       fullPath: '/orientation'
       preLoaderRoute: typeof OrientationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/classements': {
@@ -278,6 +298,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClassementsRoute: ClassementsRoute,
+  DocsRoute: DocsRoute,
   OrientationRoute: OrientationRoute,
   ParametresRoute: ParametresRoute,
   PredictifRoute: PredictifRoute,
