@@ -11,6 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/AppSidebar";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -77,11 +80,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "ONPS — Observatoire National de la Performance Scolaire" },
+      { name: "description", content: "Plateforme nationale de pilotage de la performance scolaire en Côte d'Ivoire — BI, IA et analyses prédictives." },
+      { name: "author", content: "Ministère de l'Éducation Nationale" },
+      { property: "og:title", content: "ONPS — Observatoire National de la Performance Scolaire" },
+      { property: "og:description", content: "Pilotage du système éducatif ivoirien : élèves, enseignants, établissements, DRENA." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
@@ -118,8 +121,29 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <SidebarProvider>
+        <div className="min-h-screen flex w-full bg-background">
+          <AppSidebar />
+          <div className="flex-1 flex flex-col min-w-0">
+            <header className="h-12 flex items-center gap-3 border-b bg-card px-3 sticky top-0 z-10">
+              <SidebarTrigger />
+              <div className="flex items-center gap-2 text-sm">
+                <span className="font-semibold">ONPS</span>
+                <span className="text-muted-foreground hidden md:inline">· Observatoire National de la Performance Scolaire</span>
+              </div>
+              <div className="ml-auto flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[color:var(--kpi-up)]" />
+                <span className="text-xs text-muted-foreground">Données 2024-2025</span>
+              </div>
+            </header>
+            <main className="flex-1 min-w-0">
+              {/* Required: nested routes render here. */}
+              <Outlet />
+            </main>
+          </div>
+        </div>
+        <Toaster />
+      </SidebarProvider>
     </QueryClientProvider>
   );
 }
