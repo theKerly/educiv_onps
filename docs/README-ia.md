@@ -25,6 +25,31 @@ Tous les paramètres vivent dans `src/lib/params/index.ts`. Aucun composant ne c
 | Risque école | réussite BEPC/BAC, abandon, ratio classe, infra | probability |
 | Accompagnement enseignant | 5 KPIs pédagogiques | probability |
 | Orientation | académique + engagement + régularité + compétences + difficulté filière | compatibilityScore, successProbability, confidence |
+| Réussite BAC | moyennes pondérées série-dépendantes (`predictBAC(grades, serie)`) | probability + label |
+| Cohortes (k-means) | 4 dimensions (académique/engagement/skills/contexte) | 4 profils : excellence / potentiel / vulnérable / standard |
+| Équité éducative | académique par genre, urbanité, tiers socio-éco | index 0–100 par dimension + global |
+| Projections nationales | série temporelle examen + régression linéaire | taux projetés + IC 95 % |
+
+## Modules complémentaires
+
+| Fichier | Rôle |
+|---|---|
+| `src/lib/ai/cohorts.ts`     | Segmentation k-means embarquée, centroïdes initiaux fixés. |
+| `src/lib/ai/equity.ts`      | Index d'équité (genre, urbain/rural, socio-éco). |
+| `src/lib/ai/projections.ts` | Régression linéaire + intervalle de confiance pour BAC / BEPC. |
+| `src/lib/services/analytics.service.ts` | Agrège cohortes/équité/projections (cache mémoire). |
+
+## Réalisme du dataset synthétique
+
+Le générateur (`src/lib/data/generator.ts`) **n'est pas indépendant** : il
+couple explicitement le talent latent d'un élève à son contexte familial,
+à la qualité de son établissement et au biais structurel de sa DRENA
+(`DRENA_BIAS`). Les notes sont ensuite tirées de ce talent + une dérive
+par trimestre influencée par l'implication. Les taux de réussite
+aux examens nationaux sont calibrés sur les ordres de grandeur ivoiriens
+(BAC ≈ 40 %, BEPC ≈ 55 %), puis modulés par le talent et la DRENA. Cinq
+cohortes historiques d'examens (2021 → 2025) sont générées par école pour
+permettre les analyses pluri-annuelles et les projections.
 
 ## Transparence
 
